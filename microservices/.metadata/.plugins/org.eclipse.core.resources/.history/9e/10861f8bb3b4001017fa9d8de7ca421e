@@ -1,0 +1,77 @@
+package com.example.employeeservice.service.impl;
+
+import com.example.employeeservice.dto.EmployeeDTO;
+import com.example.employeeservice.entity.Employee;
+import com.example.employeeservice.exception.DepartmentNotFoundException;
+import com.example.employeeservice.repository.EmployeeRepository;
+import com.example.employeeservice.service.EmployeeService;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+    private final WebClient webClient;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, WebClient webClient) {
+        this.employeeRepository = employeeRepository;
+        this.webClient = webClient;
+    }
+
+    @Override
+    public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
+        validateDepartmentExists(employeeDTO.getDepartmentId());
+
+        Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getDepartmentId());
+        Employee saved = employeeRepository.save(employee);
+        return new EmployeeDTO(saved.getId(), saved.getName(), saved.getDepartmentId());
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(emp -> new EmployeeDTO(emp.getId(), emp.getName(), emp.getDepartmentId()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public EmployeeDTO getEmployeeById(Long id) {
+        Employee emp = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+        return new EmployeeDTO(emp.getId(), emp.getName(), emp.getDepartmentId());
+    }
+
+    @Override
+    public EmployeeDTO updateEmployeeDepartment(Long id, Long newDepartmentId) {
+        Employee emp = employeeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        validateDepartmentExists(newDepartmentId);
+
+        emp.setDepartmentId(newDepartmentId);
+        Employee updated = employeeRepository.save(emp);
+        return new EmployeeDTO(updated.getId(), updated.getName(), updated.getDepartmentId());
+    }
+
+    /**
+     * ✅ Validates whether the department exists in the Department Service
+     */
+    private void validateDepartmentExists(Long departmentId) {
+        try {
+            webClient.get()
+                    .uri("http://localhost:8081/api/departments/" + departmentId)
+                    .retrieve()
+                    .bodyToMono(Object.class)
+                    .block(); // blocking call for synchronous flow
+        } catch (WebClientResponseException.NotFound ex) {
+            throw new DepartmentNotFoundException("Department with ID " + departmentId + " does not exist.");
+        } catch (Exception ex) {
+            throw new RuntimeException("Error connecting to Department Service: " + ex.getMessage());
+        }
+    }
+}
