@@ -1,0 +1,58 @@
+package com.tss.employee_service.service.impl;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.tss.employee_service.dto.DepartmentDto;
+import com.tss.employee_service.dto.EmployeeApiResponse;
+import com.tss.employee_service.dto.EmployeeDTO;
+import com.tss.employee_service.entity.Employee;
+import com.tss.employee_service.repository.EmployeeRepository;
+import com.tss.employee_service.service.EmployeeService;
+
+@Service
+public class EmployeeServiceImpl implements EmployeeService {
+
+    private final EmployeeRepository employeeRepository;
+    private final ModelMapper modelMapper;
+//    private final RestTemplate restTemplate;
+	private final WebClient webClient;
+
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ModelMapper modelMapper, WebClient webClient) {
+        this.employeeRepository = employeeRepository;
+        this.modelMapper = modelMapper;
+        this.webClient = webClient;
+        //this.restTemplate = restTemplate;
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() {
+        return employeeRepository.findAll().stream()
+                .map(emp -> modelMapper.map(emp, EmployeeDTO.class))
+                .collect(Collectors.toList());
+    }
+
+
+    @Override
+    public EmployeeApiResponse readAnEmployee(long employeeId) {
+        Employee dbEmployee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        ResponseEntity<DepartmentDto> departmentResponse = restTemplate.getForEntity(
+                "http://localhost:8081/api/departments/" + dbEmployee.getDepartmentId(),
+                DepartmentDto.class);
+
+        EmployeeApiResponse response = new EmployeeApiResponse();
+        response.setEmployee(modelMapper.map(dbEmployee, EmployeeDTO.class));
+        response.setDepartment(departmentResponse.getBody());
+
+        return response;
+    }
+
+}

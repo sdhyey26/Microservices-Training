@@ -1,0 +1,41 @@
+package com.tss.department_service.service.impl;
+
+import com.example.departmentservice.dto.DepartmentDTO;
+import com.example.departmentservice.entity.Department;
+import com.example.departmentservice.repository.DepartmentRepository;
+import com.example.departmentservice.service.DepartmentService;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+    private final DepartmentRepository departmentRepository;
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+    @Override
+    public DepartmentDTO createDepartment(DepartmentDTO departmentDTO) {
+        Department department = new Department(departmentDTO.getName());
+        Department saved = departmentRepository.save(department);
+        return new DepartmentDTO(saved.getId(), saved.getName());
+    }
+
+    @Override
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentRepository.findAll().stream()
+                .map(dept -> new DepartmentDTO(dept.getId(), dept.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public DepartmentDTO getDepartmentById(Long id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found with id: " + id));
+        return new DepartmentDTO(department.getId(), department.getName());
+    }
+}

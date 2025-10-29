@@ -1,0 +1,20 @@
+package com.tss.employee_service.dto;
+
+import lombok.Data;
+
+@Data
+public class EmployeeDTO {
+    private Long id;
+    private String name;
+    private Long departmentId;
+
+    public EmployeeDTO() {}
+
+    public EmployeeDTO(Long id, String name, Long departmentId) {
+        this.id = id;
+        this.name = name;
+        this.departmentId = departmentId;
+    }
+
+
+}

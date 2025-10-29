@@ -1,0 +1,71 @@
+package com.tss.department_service.service.impl;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import com.tss.department_service.dto.DepartmentDTO;
+import com.tss.department_service.dto.EmployeeDTO;
+import com.tss.department_service.entity.Department;
+import com.tss.department_service.repository.DepartmentRepository;
+import com.tss.department_service.service.DepartmentService;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+    private final DepartmentRepository departmentRepository;
+
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository) {
+        this.departmentRepository = departmentRepository;
+    }
+
+
+
+    @Override
+    public List<DepartmentDTO> getAllDepartments() {
+        return departmentRepository.findAll().stream()
+                .map(dept -> new DepartmentDTO(dept.getId(), dept.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public DepartmentDTO getDepartmentById(Long id) {
+        Department department = departmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Department not found with id: " + id));
+        return new DepartmentDTO(department.getId(), department.getName());
+    }
+    
+    @Override
+    public List<EmployeeDTO> getEmployeesByDepartment(Long departmentId) {
+        EmployeeDTO[] employees = webClient.get()
+                .uri("http://localhost:8082/api/employees")
+                .retrieve()
+                .bodyToMono(EmployeeDTO[].class)
+                .block();
+
+        if (employees == null) {
+            throw new RuntimeException("Could not fetch employees from Employee Service");
+        }
+
+        // Filter employees belonging to this department
+        return Arrays.stream(employees)
+                .filter(e -> e.getDepartmentId().equals(departmentId))
+                .collect(Collectors.toList());
+    }
+
+    // ✅ 2. Update the department of a particular employee
+    @Override
+    public EmployeeDTO updateEmployeeDepartment(Long employeeId, Long newDepartmentId) {
+        // Prepare update payload
+        EmployeeDTO updatedEmployee = new EmployeeDTO();
+        updatedEmployee.setDepartmentId(newDepartmentId);
+
+        return webClient.put()
+                .uri("http://localhost:8082/api/employees/" + employeeId + "/department/" + newDepartmentId)
+                .retrieve()
+                .bodyToMono(EmployeeDTO.class)
+                .block();
+    }
+}

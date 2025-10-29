@@ -1,0 +1,11 @@
+package com.tss.department_service.service;
+
+import java.util.List;
+
+import com.tss.department_service.dto.DepartmentDTO;
+
+public interface DepartmentService {
+    DepartmentDTO createDepartment(DepartmentDTO departmentDTO);
+    List<DepartmentDTO> getAllDepartments();
+    DepartmentDTO getDepartmentById(Long id);
+}

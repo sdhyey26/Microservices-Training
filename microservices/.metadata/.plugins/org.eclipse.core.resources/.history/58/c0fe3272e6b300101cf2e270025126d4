@@ -1,0 +1,10 @@
+package com.example.employeeservice.service;
+
+import com.example.employeeservice.dto.EmployeeDTO;
+import java.util.List;
+
+public interface EmployeeService {
+    EmployeeDTO createEmployee(EmployeeDTO employeeDTO);
+    List<EmployeeDTO> getAllEmployees();
+    EmployeeDTO getEmployeeById(Long id);
+}
