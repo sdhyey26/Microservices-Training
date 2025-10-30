@@ -41,10 +41,10 @@ public class DepartmentController {
         return ResponseEntity.ok(departmentService.getEmployeesByDepartment(id));
     }
 
-    @PutMapping("/employee/{employeeId}/department/{newDeptId}")
-    public ResponseEntity<EmployeeDTO> updateEmployeeDepartment(
-            @PathVariable Long employeeId,
-            @PathVariable Long newDeptId) {
-        return ResponseEntity.ok(departmentService.updateEmployeeDepartment(employeeId, newDeptId));
-    }
+//    @PutMapping("/employee/{employeeId}/department/{newDeptId}")
+//    public ResponseEntity<EmployeeDTO> updateEmployeeDepartment(
+//            @PathVariable Long employeeId,
+//            @PathVariable Long newDeptId) {
+//        return ResponseEntity.ok(departmentService.updateEmployeeDepartment(employeeId, newDeptId));
+//    }
 }

@@ -4,25 +4,27 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import com.tss.department_service.dto.DepartmentDTO;
 import com.tss.department_service.dto.EmployeeDTO;
 import com.tss.department_service.entity.Department;
 import com.tss.department_service.repository.DepartmentRepository;
 import com.tss.department_service.service.DepartmentService;
+import com.tss.department_service.service.EmployeeApiClient;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
     private final DepartmentRepository departmentRepository;
-    private WebClient webClient ;
+//    private WebClient webClient ;
+    private EmployeeApiClient employeeApiClient;
     
 
-    public DepartmentServiceImpl(DepartmentRepository departmentRepository ,WebClient webClient ) {
+    public DepartmentServiceImpl(DepartmentRepository departmentRepository ,EmployeeApiClient employeeApiClient ) {
         this.departmentRepository = departmentRepository;
-        this.webClient = webClient;
+        this.employeeApiClient = employeeApiClient;
     }
 
 
@@ -43,31 +45,28 @@ public class DepartmentServiceImpl implements DepartmentService {
     
     @Override
     public List<EmployeeDTO> getEmployeesByDepartment(Long departmentId) {
-        EmployeeDTO[] employees = webClient.get()
-                .uri("http://localhost:8080/api/employees")
-                .retrieve()
-                .bodyToMono(EmployeeDTO[].class)
-                .block();
+        ResponseEntity<List<EmployeeDTO>> response = employeeApiClient.getAllEmployees();
 
-        if (employees == null) {
+        if (response == null || response.getBody() == null) {
             throw new RuntimeException("Could not fetch employees from Employee Service");
         }
 
-        return Arrays.stream(employees)
-                .filter(e -> e.getDepartmentId().equals(departmentId))
+        return response.getBody().stream()
+                .filter(e -> departmentId.equals(e.getDepartmentId()))
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public EmployeeDTO updateEmployeeDepartment(Long employeeId, Long newDepartmentId) {
-        // Prepare update payload
-        EmployeeDTO updatedEmployee = new EmployeeDTO();
-        updatedEmployee.setDepartmentId(newDepartmentId);
 
-        return webClient.put()
-                .uri("http://localhost:8080/api/employees/" + employeeId + "/department/" + newDepartmentId)
-                .retrieve()
-                .bodyToMono(EmployeeDTO.class)
-                .block();
-    }
+//    @Override
+//    public EmployeeDTO updateEmployeeDepartment(Long employeeId, Long newDepartmentId) {
+//        // Prepare update payload
+//        EmployeeDTO updatedEmployee = new EmployeeDTO();
+//        updatedEmployee.setDepartmentId(newDepartmentId);
+//
+//        return webClient.put()
+//                .uri("http://localhost:8080/api/employees/" + employeeId + "/department/" + newDepartmentId)
+//                .retrieve()
+//                .bodyToMono(EmployeeDTO.class)
+//                .block();
+//    }
 }
