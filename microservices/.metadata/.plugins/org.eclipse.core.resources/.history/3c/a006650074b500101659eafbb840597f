@@ -1,0 +1,14 @@
+package com.tss.employee_service.service;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import com.tss.employee_service.*;
+
+public interface DepartmentApiClient {
+
+	
+    @GetMapping("/{id}")
+    public ResponseEntity<DepartmentDTO> getDepartmentById(@PathVariable Long id);
+}

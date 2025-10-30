@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import com.tss.employee_service.dto.DepartmentDto;
@@ -14,6 +14,7 @@ import com.tss.employee_service.dto.EmployeeDTO;
 import com.tss.employee_service.entity.Employee;
 import com.tss.employee_service.exception.DepartmentNotFoundException;
 import com.tss.employee_service.repository.EmployeeRepository;
+import com.tss.employee_service.service.DepartmentApiClient;
 import com.tss.employee_service.service.EmployeeService;
 
 @Service
@@ -22,12 +23,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ModelMapper modelMapper;
 //    private final RestTemplate restTemplate;
-	private final WebClient webClient;
+	private DepartmentApiClient departmentApiClient;
 
-    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ModelMapper modelMapper, WebClient webClient) {
+    public EmployeeServiceImpl(EmployeeRepository employeeRepository, ModelMapper modelMapper, DepartmentApiClient departmentApiClient) {
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
-        this.webClient = webClient;
+        this.departmentApiClient = departmentApiClient;
         //this.restTemplate = restTemplate;
     }
 
@@ -48,15 +49,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                "http://localhost:8081/api/departments/" + dbEmployee.getDepartmentId(),
 //                DepartmentDto.class);
         
-        DepartmentDto departmentResponse = webClient.get()
-        		.uri("http://localhost:8081/api/departments/"+dbEmployee.getDepartmentId())
-        		.retrieve()
-        		.bodyToMono(DepartmentDto.class)
-        		.block();
+//        DepartmentDto departmentResponse = webClient.get()
+//        		.uri("http://localhost:8081/api/departments/"+dbEmployee.getDepartmentId())
+//        		.retrieve()
+//        		.bodyToMono(DepartmentDto.class)
+//        		.block();
+        
+        ResponseEntity<DepartmentDto> departmentResponse = departmentApiClient.getDepartmentById(dbEmployee.getId());
 
         EmployeeApiResponse response = new EmployeeApiResponse();
         response.setEmployee(modelMapper.map(dbEmployee, EmployeeDTO.class));
-        response.setDepartment(departmentResponse);
+        response.setDepartment(departmentResponse.getBody());
 
         return response;
     }
@@ -66,7 +69,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employee emp = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Employee not found"));
 
-        validateDepartmentExists(newDepartmentId);
+//        validateDepartmentExists(newDepartmentId);
 
         emp.setDepartmentId(newDepartmentId);
         Employee updated = employeeRepository.save(emp);
@@ -75,26 +78,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO employeeDTO) {
-        validateDepartmentExists(employeeDTO.getDepartmentId());
+//        validateDepartmentExists(employeeDTO.getDepartmentId());
 
         Employee employee = new Employee(employeeDTO.getName(), employeeDTO.getDepartmentId());
         Employee saved = employeeRepository.save(employee);
         return new EmployeeDTO(saved.getId(), saved.getName(), saved.getDepartmentId());
     }
     
-    private void validateDepartmentExists(Long departmentId) {
-        try {
-            webClient.get()
-                    .uri("http://localhost:8081/api/departments/" + departmentId)
-                    .retrieve()
-                    .bodyToMono(Object.class)
-                    .block(); // blocking call for synchronous flow
-        } catch (WebClientResponseException.NotFound ex) {
-            throw new DepartmentNotFoundException("Department with ID " + departmentId + " does not exist.");
-        } catch (Exception ex) {
-            throw new RuntimeException("Error connecting to Department Service: " + ex.getMessage());
-        }
-    }
+//    private void validateDepartmentExists(Long departmentId) {
+//        try {
+//            webClient.get()
+//                    .uri("http://localhost:8081/api/departments/" + departmentId)
+//                    .retrieve()
+//                    .bodyToMono(Object.class)
+//                    .block(); // blocking call for synchronous flow
+//        } catch (WebClientResponseException.NotFound ex) {
+//            throw new DepartmentNotFoundException("Department with ID " + departmentId + " does not exist.");
+//        } catch (Exception ex) {
+//            throw new RuntimeException("Error connecting to Department Service: " + ex.getMessage());
+//        }
+//    }
 
 
 }
