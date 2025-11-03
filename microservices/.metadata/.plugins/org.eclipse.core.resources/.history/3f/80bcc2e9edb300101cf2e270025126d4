@@ -1,9 +1,0 @@
-package com.tss.employee_service.dto;
-
-
-public class EmployeeApiResponse {
-
-	private EmployeeDTO employee;
-	private DepartmentDto department;
-	
-}

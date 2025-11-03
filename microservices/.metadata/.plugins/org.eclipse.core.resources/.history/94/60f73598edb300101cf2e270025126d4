@@ -1,5 +1,0 @@
-package com.tss.employee_service.dto;
-
-public class DepartmentDto {
-
-}

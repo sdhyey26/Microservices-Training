@@ -1,9 +1,0 @@
-package com.tss.employee_service.config;
-
-public class AppConfig {
-
-	
-	ModelMapper modelMapper() {
-		return new ModelMapper();
-	}
-}

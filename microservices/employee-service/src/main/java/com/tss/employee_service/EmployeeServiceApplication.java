@@ -2,10 +2,12 @@ package com.tss.employee_service;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients(basePackages = "com.tss.employee_service.service")
+@EnableEurekaServer
 public class EmployeeServiceApplication {
 
 	public static void main(String[] args) {

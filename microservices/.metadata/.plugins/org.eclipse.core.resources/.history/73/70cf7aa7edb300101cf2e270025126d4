@@ -1,6 +1,0 @@
-package com.tss.employee_service.dto;
-
-public class DepartmentDto {
-    private Long id;
-    private String name;
-}
