@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.tss.department_service.dto.EmployeeDTO;
 
-@FeignClient(url = "http://localhost:8080" , value = "employee-service")
+@FeignClient( name = "employee-service")
 public interface EmployeeApiClient {
 
 	
