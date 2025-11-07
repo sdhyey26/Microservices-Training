@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmployeeResponseDto {
     private Long employeeId;
-    private String name;
+    private String empName;
+    private String empEmail;
     private double salary;
     private Long deptId;
+    
 }

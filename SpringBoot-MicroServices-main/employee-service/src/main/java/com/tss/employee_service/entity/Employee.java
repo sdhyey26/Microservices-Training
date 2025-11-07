@@ -1,11 +1,6 @@
 package com.tss.employee_service.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,12 +14,17 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long employeeId;
+    private long id;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "salary")
     private double salary;
-    
-    @Column
+
+    @Column(name = "dept_id")
     private long deptId;
 }

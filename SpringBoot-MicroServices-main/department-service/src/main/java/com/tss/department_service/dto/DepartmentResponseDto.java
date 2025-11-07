@@ -8,4 +8,5 @@ import lombok.*;
 public class DepartmentResponseDto {
     private long deptId;
     private String deptName;
+    private String deptDescription;
 }

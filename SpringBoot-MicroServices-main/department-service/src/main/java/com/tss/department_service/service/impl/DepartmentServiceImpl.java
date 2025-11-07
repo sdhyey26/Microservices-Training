@@ -1,6 +1,5 @@
 package com.tss.department_service.service.impl;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +30,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentResponseDto createDepartment(DepartmentRequestDto requestDto) {
         Department department = new Department();
         department.setDeptName(requestDto.getDeptName());
+        department.setDeptDescription(requestDto.getDeptDescription());
         Department saved = departmentRepository.save(department);
         return mapToResponse(saved);
     }
@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     private DepartmentResponseDto mapToResponse(Department department) {
-        return new DepartmentResponseDto(department.getDeptId(), department.getDeptName());
+        return new DepartmentResponseDto(department.getDeptId(), department.getDeptName(), department.getDeptDescription());
     }
     
     @Override
@@ -64,7 +64,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
         // 🔹 3️⃣ Build and return response
         DepartmentApiResponse response = new DepartmentApiResponse();
-        response.setDepartment(new DepartmentResponseDto(department.getDeptId(), department.getDeptName()));
+        response.setDepartment(new DepartmentResponseDto(department.getDeptId(), department.getDeptName(), department.getDeptDescription()));
         response.setEmployee(employees);
 
         return response;

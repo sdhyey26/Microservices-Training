@@ -48,7 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         // ✅ Step 2: Create and save employee
         Employee employee = new Employee();
-        employee.setName(requestDto.getName());
+        employee.setName(requestDto.getEmpName());
+        employee.setEmail(requestDto.getEmpEmail());
         employee.setSalary(requestDto.getSalary());
         employee.setDeptId(requestDto.getDeptId());
 
@@ -110,8 +111,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeResponseDto mapToResponseDto(Employee employee) {
         return new EmployeeResponseDto(
-                employee.getEmployeeId(),
+                employee.getId(),
                 employee.getName(),
+                employee.getEmail(),
                 employee.getSalary(),
                 employee.getDeptId()
         );

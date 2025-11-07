@@ -7,4 +7,5 @@ import lombok.*;
 @AllArgsConstructor
 public class DepartmentRequestDto {
     private String deptName;
+    private String deptDescription;
 }
