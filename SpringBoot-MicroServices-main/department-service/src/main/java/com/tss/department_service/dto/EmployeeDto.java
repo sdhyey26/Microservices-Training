@@ -9,6 +9,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class EmployeeDto {
 	
-	private String name;
+	private String empName;
 	private double salary;
 }

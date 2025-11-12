@@ -1,0 +1,498 @@
+{
+  "info": {
+    "_postman_id": "c7a4b3d0-1234-5678-90ab-cdef12345678",
+    "name": "Microservices API Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Department Service",
+      "item": [
+        {
+          "name": "Create Department",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"deptName\": \"Engineering\",\n    \"deptDescription\": \"Software Development Department\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9191/deptservice/departments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["deptservice", "departments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"deptName\": \"Engineering\",\n    \"deptDescription\": \"Software Development Department\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:9191/deptservice/departments",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["deptservice", "departments"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"deptId\": 1,\n    \"deptName\": \"Engineering\",\n    \"deptDescription\": \"Software Development Department\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Department by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9191/deptservice/departments/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["deptservice", "departments", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:9191/deptservice/departments/1",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["deptservice", "departments", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"department\": {\n        \"deptId\": 1,\n        \"deptName\": \"Engineering\",\n        \"deptDescription\": \"Software Development Department\"\n    },\n    \"employee\": [\n        {\n            \"empName\": \"John Doe\",\n            \"salary\": 100000.0\n        }\n    ]\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get All Departments",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9191/deptservice/departments",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["deptservice", "departments"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:9191/deptservice/departments",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["deptservice", "departments"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n    {\n        \"deptId\": 1,\n        \"deptName\": \"Engineering\",\n        \"deptDescription\": \"Software Development Department\"\n    },\n    {\n        \"deptId\": 2,\n        \"deptName\": \"HR\",\n        \"deptDescription\": \"Human Resources Department\"\n    }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Employee Service",
+      "item": [
+        {
+          "name": "Create Employee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"empName\": \"John Doe\",\n    \"empEmail\": \"john.doe@example.com\",\n    \"salary\": 100000.0,\n    \"deptId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9191/empservice/employees",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["empservice", "employees"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"empName\": \"John Doe\",\n    \"empEmail\": \"john.doe@example.com\",\n    \"salary\": 100000.0,\n    \"deptId\": 1\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:9191/empservice/employees",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["empservice", "employees"]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"employeeId\": 1,\n    \"empName\": \"John Doe\",\n    \"empEmail\": \"john.doe@example.com\",\n    \"salary\": 100000.0,\n    \"deptId\": 1\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Employee by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9191/empservice/employees/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["empservice", "employees", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:9191/empservice/employees/1",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["empservice", "employees", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"employee\": {\n        \"employeeId\": 1,\n        \"empName\": \"John Doe\",\n        \"empEmail\": \"john.doe@example.com\",\n        \"salary\": 100000.0,\n        \"deptId\": 1\n    },\n    \"department\": {\n        \"deptId\": 1,\n        \"deptName\": \"Engineering\",\n        \"deptDescription\": \"Software Development Department\"\n    }\n}"
+            }
+          ]
+        },
+        {
+          "name": "Get Employees by Department",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{jwt_token}}"
+              }
+            ],
+            "url": {
+              "raw": "http://localhost:9191/empservice/employees/department/1",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["empservice", "employees", "department", "1"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Bearer {{jwt_token}}"
+                  }
+                ],
+                "url": {
+                  "raw": "http://localhost:9191/empservice/employees/department/1",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["empservice", "employees", "department", "1"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n    {\n        \"employeeId\": 1,\n        \"empName\": \"John Doe\",\n        \"empEmail\": \"john.doe@example.com\",\n        \"salary\": 100000.0,\n        \"deptId\": 1\n    },\n    {\n        \"employeeId\": 2,\n        \"empName\": \"Jane Smith\",\n        \"empEmail\": \"jane.smith@example.com\",\n        \"salary\": 95000.0,\n        \"deptId\": 1\n    }\n]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Auth Service",
+      "item": [
+        {
+          "name": "Register User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\",\n    \"email\": \"test@example.com\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9191/auth/register",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["auth", "register"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\",\n    \"email\": \"test@example.com\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:9191/auth/register",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["auth", "register"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTYzMzQ5NjQwMCwiZXhwIjoxNjMzNTgyODAwfQ.1Q2w3e4r5t6y7u8i9o0p-[...]\",\n    \"tokenType\": \"Bearer\"\n}"
+            }
+          ]
+        },
+        {
+          "name": "Authenticate User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:9191/auth/authenticate",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "9191",
+              "path": ["auth", "authenticate"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success Response",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"username\": \"testuser\",\n    \"password\": \"password123\"\n}"
+                },
+                "url": {
+                  "raw": "http://localhost:9191/auth/authenticate",
+                  "protocol": "http",
+                  "host": ["localhost"],
+                  "port": "9191",
+                  "path": ["auth", "authenticate"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n    \"accessToken\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTYzMzQ5NjQwMCwiZXhwIjoxNjMzNTgyODAwfQ.1Q2w3e4r5t6y7u8i9o0p-[...]\",\n    \"tokenType\": \"Bearer\"\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "jwt_token",
+      "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTYzMzQ5NjQwMCwiZXhwIjoxNjMzNTgyODAwfQ.1Q2w3e4r5t6y7u8i9o0p-[...]"
+    }
+  ]
+}

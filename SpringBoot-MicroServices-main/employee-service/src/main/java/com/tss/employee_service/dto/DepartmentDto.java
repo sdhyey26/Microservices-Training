@@ -1,11 +1,14 @@
 package com.tss.employee_service.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
-@RequiredArgsConstructor
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DepartmentDto {
-	 private long id;
-	    private String dept_name;
+    private long deptId;
+    private String deptName;
+    private String deptDescription;
 }

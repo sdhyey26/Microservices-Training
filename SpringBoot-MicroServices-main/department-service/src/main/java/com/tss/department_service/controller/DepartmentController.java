@@ -2,8 +2,16 @@ package com.tss.department_service.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.tss.department_service.dto.DepartmentApiResponse;
 import com.tss.department_service.dto.DepartmentRequestDto;
@@ -16,6 +24,11 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/deptservice/departments")
 @RequiredArgsConstructor
 public class DepartmentController {
+	
+	@Value("${app.name}")
+	String app_name ;
+	
+	
 
     private final DepartmentService departmentService;
 
@@ -28,6 +41,7 @@ public class DepartmentController {
     @GetMapping
     public ResponseEntity<List<DepartmentResponseDto>> getAllDepartments() {
         List<DepartmentResponseDto> departments = departmentService.getAllDepartments();
+        System.out.println(app_name);
         return ResponseEntity.ok(departments);
     }
 
